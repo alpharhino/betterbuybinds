@@ -23,18 +23,18 @@ def main():
 
 def print_intro():
     print('CSGO ' + proj_name + ' Installer v' + ver_number + '')
-    print ('Author: Ryan Fisher\tRepo: https://github.com/alpharhino/betterbuybinds')
-    print ('')
+    print('Author: Ryan Fisher\tRepo: https://github.com/alpharhino/betterbuybinds')
+    print('')
 
 
 def generate_file_list():
     for root, dirs, files in os.walk('cfg'):
-        print files
+        print(files)
 
 
 def setup_win():
     install_path = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Counter-Strike Global Offensive\\csgo\\cfg\\'
-    print ('Attempting to autolocate CSGO install directory...')
+    print('Attempting to autolocate CSGO install directory...')
     if not os.path.exists(install_path):
         drive_letter = None
         while drive_letter is None:
@@ -43,15 +43,15 @@ def setup_win():
                 drive_letter = None
             if drive_letter.lower() == 'c':
                 pass
-        print drive_letter
+        print(drive_letter)
 
     try:
         os.mkdir(install_path + target_cfg_file_dir)
     except WindowsError:
-        print ('Path to ' + proj_name + ' install already exists.')
+        print('Path to ' + proj_name + ' install already exists.')
         selected_option = raw_input("Would you like to update your files(Y/[N])? ")
         if selected_option.lower() != 'y':
-            print ('Configs not installed')
+            print('Configs not installed')
             sys.exit()
 
     failed_files_list = {}
@@ -63,15 +63,13 @@ def setup_win():
             failed_files_list[filename] = exception
 
     if len(failed_files_list):
-        print ('Failed Files')
+        print('Failed Files')
         for filename in failed_files_list.keys():
-            print (filename + ' failed due to: ' + str(failed_files_list[filename]))
-        print ('End Failed Files')
+            print(filename + ' failed due to: ' + str(failed_files_list[filename]))
+        print('End Failed Files')
 
     else:
-        print ('SUCCESS: ' + str(len(cfg_file_list)) + ' files copied to ' + target_cfg_file_dir)
-
-
+        print('SUCCESS: ' + str(len(cfg_file_list)) + ' files copied to ' + target_cfg_file_dir)
 
 
 def setup_linux():
