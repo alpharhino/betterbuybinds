@@ -55,7 +55,7 @@ def setup_win():
     failed_files_list = {}
     for filename in cfg_file_dict.keys():
         try:
-            print cfg_file_dict[filename][0] + filename
+            print(cfg_file_dict[filename][0] + filename)
             if not os.path.exists(install_path + target_cfg_file_dir + cfg_file_dict[filename][1]):
                 os.mkdir(install_path + target_cfg_file_dir + cfg_file_dict[filename][1])
             shutil.copyfile(src=cwd + cfg_file_dict[filename][0] + filename,
