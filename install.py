@@ -1,10 +1,13 @@
 import os
 import sys
 import shutil
+import time
 
+cwd = os.getcwd() + '\\'
 cfg_file_dir = 'cfg'
-cfg_file_list = ['autoexec.cfg', 'buys.cfg', 'devconsole.cfg']
-target_cfg_file_dir = 'BetterBuyBinds'
+
+cfg_file_dict = {}
+target_cfg_file_dir = 'BetterBuyBinds\\'
 proj_name = 'BetterBuyBinds'
 ver_number = '0.1'
 
@@ -28,9 +31,11 @@ def print_intro():
 
 
 def generate_file_list():
-    for root, dirs, files in os.walk('cfg'):
-        print(files)
-
+    start_dir = os.getcwd()
+    for root, dirs, filenames in os.walk(cfg_file_dir):
+        for filename in filenames:
+            cfg_file_dict[filename] = [root + '\\', root.replace(cfg_file_dir, '') + '\\']
+    os.chdir(start_dir)
 
 def setup_win():
     install_path = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Counter-Strike Global Offensive\\csgo\\cfg\\'
@@ -45,20 +50,16 @@ def setup_win():
                 pass
         print(drive_letter)
 
-    try:
-        os.mkdir(install_path + target_cfg_file_dir)
-    except WindowsError:
-        print('Path to ' + proj_name + ' install already exists.')
-        selected_option = raw_input("Would you like to update your files(Y/[N])? ")
-        if selected_option.lower() != 'y':
-            print('Configs not installed')
-            sys.exit()
+    create_install_directory(install_path)
 
     failed_files_list = {}
-    for filename in cfg_file_list:
+    for filename in cfg_file_dict.keys():
         try:
-            shutil.copyfile(src=os.getcwd() + '\\' + cfg_file_dir + '\\' + filename,
-                            dst=install_path + target_cfg_file_dir + '\\' + filename)
+            print cfg_file_dict[filename][0] + filename
+            if not os.path.exists(install_path + target_cfg_file_dir + cfg_file_dict[filename][1]):
+                os.mkdir(install_path + target_cfg_file_dir + cfg_file_dict[filename][1])
+            shutil.copyfile(src=cwd + cfg_file_dict[filename][0] + filename,
+                            dst=install_path + target_cfg_file_dir + cfg_file_dict[filename][1] + filename)
         except Exception as exception:
             failed_files_list[filename] = exception
 
@@ -69,7 +70,21 @@ def setup_win():
         print('End Failed Files')
 
     else:
-        print('SUCCESS: ' + str(len(cfg_file_list)) + ' files copied to ' + target_cfg_file_dir)
+        print('SUCCESS: ' + str(len(cfg_file_dict)) + ' files copied to ' + target_cfg_file_dir)
+
+
+def create_install_directory(install_path):
+    if os.path.exists(install_path + target_cfg_file_dir):
+        print('Path to ' + proj_name + ' install already exists.')
+        selected_option = raw_input("Would you like to update your files(Y/[N])? ")
+        if selected_option.lower() != 'y':
+            print('Configs not installed')
+            sys.exit()
+        shutil.rmtree(install_path + target_cfg_file_dir, ignore_errors=True)
+        while os.path.exists(install_path + target_cfg_file_dir):
+            pass
+        time.sleep(1)
+    os.mkdir(install_path + target_cfg_file_dir)
 
 
 def setup_linux():
