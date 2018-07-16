@@ -44,7 +44,11 @@ def setup_win():
     if not os.path.exists(install_path):
         drive_letter = None
         while drive_letter is None:
-            drive_letter = raw_input("Please enter the drive letter on which csgo is installed (eg c, d, e, etc.): ")
+            try:
+                drive_letter = raw_input("Please enter the drive letter on which csgo is installed (eg c, d, e, etc.): ")
+            except:
+                drive_letter = input("Please enter the drive letter on which csgo is installed (eg c, d, e, etc.): ")
+
             if len(drive_letter) != 1 or not drive_letter.isalpha():
                 drive_letter = None
             if drive_letter.lower() == 'c':
@@ -77,7 +81,10 @@ def setup_win():
 def create_install_directory(install_path):
     if os.path.exists(install_path + target_cfg_file_dir):
         print('Path to ' + proj_name + ' install already exists.')
-        selected_option = raw_input("Would you like to update your files(Y/[N])? ")
+        try:
+            selected_option = raw_input("Would you like to update your files(Y/[N])? ")
+        except:
+            selected_option = input("Would you like to update your files(Y/[N])? ")
         if selected_option.lower() != 'y':
             print('Configs not installed')
             sys.exit()
