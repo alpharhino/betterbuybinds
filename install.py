@@ -22,6 +22,7 @@ def main():
         setup_linux()
     elif os_str == 'darwin':
         setup_mac()
+    time.sleep(2)
 
 
 def print_intro():
