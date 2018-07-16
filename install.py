@@ -37,6 +37,7 @@ def generate_file_list():
             cfg_file_dict[filename] = [root + '\\', root.replace(cfg_file_dir, '') + '\\']
     os.chdir(start_dir)
 
+
 def setup_win():
     install_path = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Counter-Strike Global Offensive\\csgo\\cfg\\'
     print('Attempting to autolocate CSGO install directory...')
@@ -51,7 +52,7 @@ def setup_win():
         print(drive_letter)
 
     create_install_directory(install_path)
-
+    generate_manifest(install_path)
     failed_files_list = {}
     for filename in cfg_file_dict.keys():
         try:
@@ -85,6 +86,14 @@ def create_install_directory(install_path):
             pass
         time.sleep(1)
     os.mkdir(install_path + target_cfg_file_dir)
+
+
+def generate_manifest(install_path):
+    manifest_file = open(install_path + 'manifest.cfg', 'w')
+    for filename in cfg_file_dict.keys():
+        manifest_file.write('echo \"Loading ' + proj_name + cfg_file_dict[filename][1] + filename + '\"\n')
+        manifest_file.write('exec ' + proj_name + cfg_file_dict[filename][1] + filename[0:-4] + '\n')
+    manifest_file.close()
 
 
 def setup_linux():
